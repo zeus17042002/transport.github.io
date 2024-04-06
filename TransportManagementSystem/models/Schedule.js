@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Bus = require("./Bus")
 const Route = require("./Route")
 var db = mongoose.createConnection(
-    "mongodb+srv://anhuynh290102:k9JOV9O4Rgw4t1up@busstationmanagement.znyfcrr.mongodb.net/BusStationM?retryWrites=true&w=majority"
+    "mongodb+srv://Huynh:la3Htbdpp8vrEtBK@appbanhang.zsp1fr6.mongodb.net/BusStationM?retryWrites=true&w=majority"
     );
 
 const { Schema, model } = mongoose;

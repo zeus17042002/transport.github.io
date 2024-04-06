@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var IndexController = require("../controllers/IndexController");
+const BusController = require("../controllers/BusController");
 
 router.get("/", function (req, res, next) {
   if(req.session.userId){
@@ -29,6 +30,7 @@ router.use(/^(?!\/logout$)/, (req, res, next) => {
 });
 
 // Các tuyến đường khác
+
 router.get("/login", IndexController.GetLogin);
 router.post("/login", IndexController.PostLogin);
 router.post("/addEmployee", IndexController.PostAddEmployee);
@@ -37,4 +39,9 @@ router.get("/routes", IndexController.GetRoutes);
 router.get("/employees", IndexController.GetEmployees);
 router.post("/changePw", IndexController.PostChangePassword);
 router.post("/resendAccessLink", IndexController.ResendAccessLink);
+
+//Bus route
+router.get("/buses", BusController.GetBuses);
+router.put("/buses/update/:id", BusController.UpdateBus);
+router.post("/buses/add", BusController.AddBus);
 module.exports = router;

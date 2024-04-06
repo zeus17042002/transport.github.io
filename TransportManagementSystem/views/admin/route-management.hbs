@@ -1,278 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Management System</title>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<style>
-  .search-bar {
-    margin-bottom: 15px;
-  }
-  .search-bar .form-control,
-  .search-bar .btn {
-    height: calc(1.5em + .75rem + 2px);
-  }
-  .search-bar .input-group {
-    margin-bottom: 0;
-  }
-  
-  .table {
-    margin-bottom: 0;
-    font-size: 0.9rem;
-  }
-  .table thead th {
-    background-color: #f2f2f2;
-  }
-  .table tbody tr:hover {
-    background-color: #e9ecef;
-  }
-  #menu {
-    background-color: #2E4053;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    padding: 0.5em 0;
-  }
-  
-  #menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    text-align: center;
-  }
-  
-  #menu ul li {
-    display: inline;
-    margin-right: 20px;
-  }
-  
-  #menu ul li a {
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 15px;
-    transition: background-color 0.3s ease;
-  }
-  
-  #menu ul li a:hover,
-  #menu ul li a:active {
-    background-color: #D5D8DC;
-    border-radius: 5px;
-  }
-  #quanLyXeMenu {
-    position: relative;
-  }
-  
-  .menu-con {
-    display: none;
-    position: absolute;
-    left: 0; 
-    top: 100%; 
-    background-color: #2e4053;
-    min-width: 200px; 
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-    white-space: nowrap; 
-  }
-  
-  #quanLyXeMenu:hover .menu-con {
-    display: block;
-  }
-  
-  .menu-con a {
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block; 
-    color: black;
-    text-align: left; 
-    background: transparent;
-    width: 200px; 
-    border-radius: 0;
-  }
-  
-  .menu-con a:hover {
-    background-color: #ddd;
-  }
-  
-  
-</style>
-</head>
-<body>
-    <div id="menu">
-        <ul>
-          <li><a href="/">Trang chủ</a></li>
-          <li id="quanLyXeMenu">
-            <a href="javascript:void(0);">Quản lý xe</a>
-            <div id="menuConQuanLyXe" class="menu-con">
-              <a href="javascript:void(0);">Nhập liệu</a>
-              <a href="javascript:void(0);">Cập nhật thông tin</a>
-              <a href="javascript:void(0);">Kiểm tra vị trí</a>
-              <a href="javascript:void(0);">Quản lý hoạt động trên xe</a>
-              <a href="javascript:void(0);">Thống kê dữ liệu</a>
-              <a href="javascript:void(0);">Nhận cảnh báo</a>
-              <a href="javascript:void(0);">Truy xuất dữ liệu</a>
-            </div>
-          </li>
-          <li><a href="/routes">Quản lý tuyến xe</a></li>
-          <li><a href="/employees">Quản lý nhân viên</a></li>
-          <li><a href="bao-cao.html">Báo cáo</a></li>
-        
-        </ul>
-      </div>
-<div class="container mt-4"> <!-- Added margin-top here -->
-  <!-- Search Bar and Buttons -->
-  <div class="search-bar input-group mb-3">
-    <input type="text" class="form-control" placeholder="Từ khóa..." aria-label="Từ khóa">
-    <div class="input-group-append">
-      <select class="custom-select">
-        <option selected>-- Lựa chọn --</option>
-        <!-- Option values go here -->
-      </select>
-    </div>
-    <div class="input-group-append">
-      <button class="btn btn-primary" type="button">Tìm kiếm</button>
-      <button class="btn btn-secondary" type="button">Reset</button>
-    </div>
-  </div>
-  
-  <!-- Data Table -->
-  <div class="table-responsive">
-    <table class="table table-bordered">
-      <thead class="thead-dark">
-        <tr>
-          <th>Biển Số</th>
-          <th>Ngày Vào</th>
-          <th>Giờ Vào</th>
-          <th>Ngày Ra</th>
-          <th>Giờ Ra</th>
-          <th>Loại Hoạt Động</th>
-          <th>Trạng Thái</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>98D17414</td>
-          <td>28/07/2017</td>
-          <td>21:34:48 CH</td>
-          <td>—</td>
-          <td>—</td>
-          <td>Xe khách vãn bến, khống hợp đồng</td>
-          <td>Đã thanh toán</td>
-        </tr>
-        <tr>
-            <td>98D17414</td>
-            <td>28/07/2017</td>
-            <td>21:34:48 CH</td>
-            <td>—</td>
-            <td>—</td>
-            <td>Xe khách vãn bến, khống hợp đồng</td>
-            <td>Đã thanh toán</td>
-          </tr>
-          <tr>
-            <td>98D17414</td>
-            <td>28/07/2017</td>
-            <td>21:34:48 CH</td>
-            <td>—</td>
-            <td>—</td>
-            <td>Xe khách vãn bến, khống hợp đồng</td>
-            <td>Đã thanh toán</td>
-          </tr>
-          <tr>
-            <td>98D17414</td>
-            <td>28/07/2017</td>
-            <td>21:34:48 CH</td>
-            <td>—</td>
-            <td>—</td>
-            <td>Xe khách vãn bến, khống hợp đồng</td>
-            <td>Đã thanh toán</td>
-          </tr>
-          <tr>
-            <td>98D17414</td>
-            <td>28/07/2017</td>
-            <td>21:34:48 CH</td>
-            <td>—</td>
-            <td>—</td>
-            <td>Xe khách vãn bến, khống hợp đồng</td>
-            <td>Đã thanh toán</td>
-          </tr>
-          <tr>
-            <td>98D17414</td>
-            <td>28/07/2017</td>
-            <td>21:34:48 CH</td>
-            <td>—</td>
-            <td>—</td>
-            <td>Xe khách vãn bến, khống hợp đồng</td>
-            <td>Đã thanh toán</td>
-          </tr>
-          <tr>
-            <td>98D17414</td>
-            <td>28/07/2017</td>
-            <td>21:34:48 CH</td>
-            <td>—</td>
-            <td>—</td>
-            <td>Xe khách vãn bến, khống hợp đồng</td>
-            <td>Đã thanh toán</td>
-          </tr>
-          <tr>
-            <td>98D17414</td>
-            <td>28/07/2017</td>
-            <td>21:34:48 CH</td>
-            <td>—</td>
-            <td>—</td>
-            <td>Xe khách vãn bến, khống hợp đồng</td>
-            <td>Đã thanh toán</td>
-          </tr>
-          <tr>
-            <td>98D17414</td>
-            <td>28/07/2017</td>
-            <td>21:34:48 CH</td>
-            <td>—</td>
-            <td>—</td>
-            <td>Xe khách vãn bến, khống hợp đồng</td>
-            <td>Đã thanh toán</td>
-          </tr>
-          <tr>
-            <td>98D17414</td>
-            <td>28/07/2017</td>
-            <td>21:34:48 CH</td>
-            <td>—</td>
-            <td>—</td>
-            <td>Xe khách vãn bến, khống hợp đồng</td>
-            <td>Đã thanh toán</td>
-          </tr>
-          <tr>
-            <td>98D17414</td>
-            <td>28/07/2017</td>
-            <td>21:34:48 CH</td>
-            <td>—</td>
-            <td>—</td>
-            <td>Xe khách vãn bến, khống hợp đồng</td>
-            <td>Đã thanh toán</td>
-          </tr>
-          <tr>
-            <td>98D17414</td>
-            <td>28/07/2017</td>
-            <td>21:34:48 CH</td>
-            <td>—</td>
-            <td>—</td>
-            <td>Xe khách vãn bến, khống hợp đồng</td>
-            <td>Đã thanh toán</td>
-          </tr>
-          <tr>
-            <td>98D17414</td>
-            <td>28/07/2017</td>
-            <td>21:34:48 CH</td>
-            <td>—</td>
-            <td>—</td>
-            <td>Xe khách vãn bến, khống hợp đồng</td>
-            <td>Đã thanh toán</td>
-          </tr>
-        <!-- More rows... -->
-      </tbody>
-    </table>
-  </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Management System</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .search-bar {
+      margin-bottom: 15px;
+    }
+
+    .search-bar .form-control,
+    .search-bar .btn {
+      height: calc(1.5em + .75rem + 2px);
+    }
+
+    .search-bar .input-group {
+      margin-bottom: 0;
+    }
+
+    .table {
+      margin-bottom: 0;
+      font-size: 0.9rem;
+    }
+
+    .table thead th {
+      background-color: #f2f2f2;
+    }
+
+    .table tbody tr:hover {
+      background-color: #e9ecef;
+    }
+
+    #menu {
+      background-color: #2E4053;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      padding: 0.5em 0;
+    }
+
+    #menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      text-align: center;
+    }
+
+    #menu ul li {
+      display: inline;
+      margin-right: 20px;
+    }
+
+    #menu ul li a {
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 15px;
+      transition: background-color 0.3s ease;
+    }
+
+    #menu ul li a:hover,
+    #menu ul li a:active {
+      background-color: #D5D8DC;
+      border-radius: 5px;
+    }
+
+    #quanLyXeMenu {
+      position: relative;
+    }
+
+    .menu-con {
+      display: none;
+      position: absolute;
+      left: 0;
+      top: 100%;
+      background-color: #2e4053;
+      min-width: 200px;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+      white-space: nowrap;
+    }
+
+    #quanLyXeMenu:hover .menu-con {
+      display: block;
+    }
+
+    .menu-con a {
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      color: black;
+      text-align: left;
+      background: transparent;
+      width: 200px;
+      border-radius: 0;
+    }
+
+    .menu-con a:hover {
+      background-color: #ddd;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="menu">
+    {{> menu}}
+  </div>
+  <div class="container mt-4"> <!-- Added margin-top here -->
+    <!-- Search Bar and Buttons -->
+    <div class="search-bar input-group mb-3">
+      <input type="text" class="form-control" placeholder="Từ khóa..." aria-label="Từ khóa">
+      <div class="input-group-append">
+        <select class="custom-select">
+          <option selected>-- Lựa chọn --</option>
+          <!-- Option values go here -->
+        </select>
+      </div>
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button">Tìm kiếm</button>
+        <button class="btn btn-secondary" type="button">Reset</button>
+      </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead class="thead-dark">
+          <tr>
+            <th>Biển Số</th>
+            <th>Ngày Vào</th>
+            <th>Giờ Vào</th>
+            <th>Ngày Ra</th>
+            <th>Giờ Ra</th>
+            <th>Loại Hoạt Động</th>
+            <th>Trạng Thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>98D17414</td>
+            <td>28/07/2017</td>
+            <td>21:34:48 CH</td>
+            <td>—</td>
+            <td>—</td>
+            <td>Xe khách vãn bến, khống hợp đồng</td>
+            <td>Đã thanh toán</td>
+          </tr>
+          <tr>
+            <td>98D17414</td>
+            <td>28/07/2017</td>
+            <td>21:34:48 CH</td>
+            <td>—</td>
+            <td>—</td>
+            <td>Xe khách vãn bến, khống hợp đồng</td>
+            <td>Đã thanh toán</td>
+          </tr>
+          <tr>
+            <td>98D17414</td>
+            <td>28/07/2017</td>
+            <td>21:34:48 CH</td>
+            <td>—</td>
+            <td>—</td>
+            <td>Xe khách vãn bến, khống hợp đồng</td>
+            <td>Đã thanh toán</td>
+          </tr>
+          <tr>
+            <td>98D17414</td>
+            <td>28/07/2017</td>
+            <td>21:34:48 CH</td>
+            <td>—</td>
+            <td>—</td>
+            <td>Xe khách vãn bến, khống hợp đồng</td>
+            <td>Đã thanh toán</td>
+          </tr>
+          <tr>
+            <td>98D17414</td>
+            <td>28/07/2017</td>
+            <td>21:34:48 CH</td>
+            <td>—</td>
+            <td>—</td>
+            <td>Xe khách vãn bến, khống hợp đồng</td>
+            <td>Đã thanh toán</td>
+          </tr>
+          <tr>
+            <td>98D17414</td>
+            <td>28/07/2017</td>
+            <td>21:34:48 CH</td>
+            <td>—</td>
+            <td>—</td>
+            <td>Xe khách vãn bến, khống hợp đồng</td>
+            <td>Đã thanh toán</td>
+          </tr>
+          <tr>
+            <td>98D17414</td>
+            <td>28/07/2017</td>
+            <td>21:34:48 CH</td>
+            <td>—</td>
+            <td>—</td>
+            <td>Xe khách vãn bến, khống hợp đồng</td>
+            <td>Đã thanh toán</td>
+          </tr>
+          <tr>
+            <td>98D17414</td>
+            <td>28/07/2017</td>
+            <td>21:34:48 CH</td>
+            <td>—</td>
+            <td>—</td>
+            <td>Xe khách vãn bến, khống hợp đồng</td>
+            <td>Đã thanh toán</td>
+          </tr>
+          <tr>
+            <td>98D17414</td>
+            <td>28/07/2017</td>
+            <td>21:34:48 CH</td>
+            <td>—</td>
+            <td>—</td>
+            <td>Xe khách vãn bến, khống hợp đồng</td>
+            <td>Đã thanh toán</td>
+          </tr>
+          <tr>
+            <td>98D17414</td>
+            <td>28/07/2017</td>
+            <td>21:34:48 CH</td>
+            <td>—</td>
+            <td>—</td>
+            <td>Xe khách vãn bến, khống hợp đồng</td>
+            <td>Đã thanh toán</td>
+          </tr>
+          <tr>
+            <td>98D17414</td>
+            <td>28/07/2017</td>
+            <td>21:34:48 CH</td>
+            <td>—</td>
+            <td>—</td>
+            <td>Xe khách vãn bến, khống hợp đồng</td>
+            <td>Đã thanh toán</td>
+          </tr>
+          <tr>
+            <td>98D17414</td>
+            <td>28/07/2017</td>
+            <td>21:34:48 CH</td>
+            <td>—</td>
+            <td>—</td>
+            <td>Xe khách vãn bến, khống hợp đồng</td>
+            <td>Đã thanh toán</td>
+          </tr>
+          <tr>
+            <td>98D17414</td>
+            <td>28/07/2017</td>
+            <td>21:34:48 CH</td>
+            <td>—</td>
+            <td>—</td>
+            <td>Xe khách vãn bến, khống hợp đồng</td>
+            <td>Đã thanh toán</td>
+          </tr>
+          <!-- More rows... -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

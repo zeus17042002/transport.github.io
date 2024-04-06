@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var AdminController = require("../controllers/AdminController");
+const BusController = require('../controllers/BusController');
 /* GET admin listing. */
 router.use('/', (req,res, next)=>{
   if(req.session.userRole != 0){
@@ -21,6 +22,7 @@ router.post("/AdminChangePassword", AdminController.PutChangeAdminPassword)
 router.put("/updateEmployee", AdminController.PutUpdateEmployee)
 
 
-
+router.get("/buses", BusController.GetBuses);
+router.get("/buses/:id", BusController.GetBusById);
 
 module.exports = router;
