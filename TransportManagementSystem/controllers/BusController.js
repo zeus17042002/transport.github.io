@@ -27,8 +27,33 @@ class BusController {
         });
       });
   }
-
+  async GetBusesData(req,res){
+    Bus.find()
+      .then((buses) => {
+        if (!buses) {
+          return res.status(404).json({
+            success: false,
+            message: "Can found any bus in database",
+          });
+        }
+        let result = [];
+        buses.forEach((buses) => {
+          result.push(buses._doc);
+        });
+        return res.status(200).json({
+          success: true,
+          buses: result
+        })
+      })
+      .catch((err) => {
+        return res.status(500).json({
+          success: false,
+          message: "Error",
+        });
+      });
+  }
   async GetBusById(req, res) {
+    console.log(req.params.id)
     Bus.findById(req.params.id)
       .then((bus) => {
         if (!bus) {
@@ -107,13 +132,25 @@ class BusController {
       });
 
       await newBus.save();
-      return res.status(200).json({ success: true });
+      return res.status(200).json({ success: true, message: "Thêm thành công" });
     } catch (err) {
       console.log(err);
       return res.status(500);
     }
   }
-  async DeleteBus(req, res) {}
+  async DeleteBus(req, res) {
+    Bus.findByIdAndDelete(req.params.id).then(bus=>{
+      return res.status(200).json({
+        success: true,
+        message: "Xóa thành công"
+      })
+    }).catch(err=>{
+      return res.status(500).json({
+        success: false,
+        message: err.message
+      })
+    })
+  }
   async UpdateBus(req, res) {
     await body("licensePlate")
       .notEmpty()
@@ -161,7 +198,7 @@ class BusController {
       const existingBus = await Bus.findOne({
         licensePlate: req.body.licensePlate,
       });
-      if (existingBus) {
+      if (existingBus && existingBus._doc._id != req.params.id) {
         return res.status(400).json({
           success: false,
           data: req.body,

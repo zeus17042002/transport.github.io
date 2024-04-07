@@ -1,0 +1,44 @@
+<!-- New employee dialog -->
+<div class="modal fade" id="newBus" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Add new bus</h1>
+                <button id="addBusClose" type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <main class="form-signin w-100 m-auto">
+                        <form style="max-width: 500px;" class="m-auto" id="addBusForm">
+                            
+                            <div class="mb-3">
+                                <input id="addBusLP" type="text" class="form-control" name="name" value="" placeholder="License Plate">
+                                <div class="invalid-feedback mt-3" id="addBusLicenseErr">
+
+                                </div>
+                            </div>
+                            <div class=" mb-3">
+                                <input id="addBusModel" type="email" class="form-control" name="email" value="" placeholder="Model">
+                                <div class="invalid-feedback mt-3" id="addBusModelErr">
+
+                                </div>
+                            </div>
+                            <div class=" mb-3">
+                                <input id="addBusCapa" type="email" class="form-control" name="email" value="" placeholder="Capacity">
+                                <div class="invalid-feedback mt-3" id="addBusCapaErr">
+
+                                </div>
+                            </div>
+                        </form>
+                    </main>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="addBus()">Add</button>
+            </div>
+        </div>
+    </div>
+</div>

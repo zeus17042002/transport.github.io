@@ -1,0 +1,46 @@
+<!-- New employee dialog -->
+<div class="modal fade" id="updateBus" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Update bus</h1>
+                <button id="updateBusClose" type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <main class="form-signin w-100 m-auto">
+                        <form style="max-width: 500px;" class="m-auto" id="updateBusForm">
+                            <div class="mb-3">
+                                <input id="updateBusId" type="text" class="form-control" name="id" value="" placeholder="id" hidden>
+                            </div>
+                            <div class="mb-3">
+                                <input id="updateBusLP" type="text" class="form-control" name="name" value="" placeholder="License Plate">
+                                <div class="invalid-feedback mt-3" id="updateBusLicenseErr">
+
+                                </div>
+                            </div>
+                            <div class=" mb-3">
+                                <input id="updateBusModel" type="email" class="form-control" name="email" value="" placeholder="Model">
+                                <div class="invalid-feedback mt-3" id="updateBusModelErr">
+
+                                </div>
+                            </div>
+                            <div class=" mb-3">
+                                <input id="updateBusCapa" type="email" class="form-control" name="email" value="" placeholder="Capacity">
+                                <div class="invalid-feedback mt-3" id="updateBusCapaErr">
+
+                                </div>
+                            </div>
+                        </form>
+                    </main>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="updateBus()">Update</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -116,8 +116,8 @@
         </select>
       </div>
       <div class="input-group-append">
-        <button class="btn btn-primary" type="button">Tìm kiếm</button>
-        <button class="btn btn-secondary" type="button">Reset</button>
+        <button class="btn btn-secondary" type="button" onclick="getBuses()">Tìm kiếm</button>
+        <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#newBus">Thêm</button>
       </div>
     </div>
 
@@ -132,7 +132,7 @@
             <th>Thao tác</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="buses-container">
           {{#each buses}}
           <tr>
             <td>
@@ -145,11 +145,13 @@
               {{capacity}}
             </td>
             <td>
-              <button class="btn btn-success" onclick="updateBus('{{_id}}')">
+              <button class="btn btn-success" onclick="getBus('{{_id}}') " data-bs-toggle="modal"
+                data-bs-target="#updateBus">
                 Sửa
               </button>
-              <button class="btn btn-success" onclick="addBus()">
-                Thêm
+              <button class="btn btn-danger" onclick="deleteBusPre('{{_id}}')" data-bs-toggle="modal"
+                data-bs-target="#deleteBus">
+                Xóa
               </button>
             </td>
           </tr>
@@ -164,23 +166,114 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 <script>
-  function updateBus(id) {
-    fetch(`/buses/update/${id}`, {
+  function getBus(id) {
+    fetch(`/bus/getBus/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.success) {
+          $("#updateBusId").val(data.bus._id);
+          $("#updateBusLP").val(data.bus.licensePlate);
+          $("#updateBusModel").val(data.bus._model);
+          $("#updateBusCapa").val(data.bus.capacity);
+        } else {
+
+        }
+      })
+  }
+  function getBuses() {
+    fetch('/bus/getBuses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.success) {
+          let tr = '';
+
+          data.buses.forEach(bus => {
+            tr += `
+        <tr>
+            <td>${bus.licensePlate}</td>
+            <td>${bus._model}</td>
+            <td>${bus.capacity}</td>
+            <td>
+              <button class="btn btn-success" onclick="getBus('{{_id}}') " data-bs-toggle="modal"
+                data-bs-target="#updateBus">
+                Sửa
+              </button>            
+                <button class="btn btn-danger" onclick="deleteBusPre('{{_id}}')" data-bs-toggle="modal" data-bs-target="#deleteBus">Xóa
+              </button>
+
+            </td>
+        </tr>
+    `;
+          });
+
+          $("#buses-container").html(tr);
+        } else {
+
+          console.log(data.message);
+        }
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  }
+
+  function updateBus() {
+    let id = $("#updateBusId").val();
+    let licensePlate = $("#updateBusLP").val();
+    let model = $("#updateBusModel").val();
+    let capa = $("#updateBusCapa").val();
+    fetch(`/bus/update/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        licensePlate: "53C1",
-        model: "Xe giường nằm",
-        capacity: 5
+        licensePlate: licensePlate,
+        model: model,
+        capacity: capa
       }),
     })
       .then(response => response.json()) // Assuming the server responds with JSON
       .then(data => {
         if (data.success) {
-          // Update the result container with a success message
-          console.log(data.message)
+          $("#updateBusClose").click();
+
+          getBuses();
+          let alert = `
+                    <div id="failAlert" class="alert alert-success alert-dismissible fade show position-absolute top-50 start-50 translate-middle" role="alert" style="z-index: 15000">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <p id="successMsg">${data.message}</p>
+                    </div>
+                    `
+          $("body").append(alert)
+          let alertX = $("#failAlert")
+          setTimeout(function () {
+            alertX.remove();
+          }, 1000);
+        }else{
+          $("#updateBusLicenseErr").text(data.licensePlateErr)
+          $("#updateBusModelErr").text(data.modelErr)
+          $("#updateBusCapaErr").text(data.capacityErr)
         }
       })
       .catch(error => {
@@ -188,25 +281,73 @@
       });
   }
   function addBus() {
-    fetch('/buses/add', {
+    fetch('/bus/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        licensePlate: "53C2",
-        model: "School bus",
-        capacity: 20
+        licensePlate: $("#addBusLP").val(),
+        model: $("#addBusModel").val(),
+        capacity: $("#addBusCapa").val()
       })
     }).then(response => response.json())
-    .then(data=>{
-      if(data.success){
-        alert("Thêm !!!")
-      }else{
-        console.log(data)
-      }
-    })
+      .then(data => {
+        if (data.success) {
+          $("#addBusClose").click();
+          let alert = `
+                    <div id="failAlert" class="alert alert-success alert-dismissible fade show position-absolute top-50 start-50 translate-middle" role="alert" style="z-index: 15000">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <p id="successMsg">${data.message}</p>
+                    </div>
+                    `
+          $("body").append(alert)
+          let alertX = $("#failAlert")
+          setTimeout(function () {
+            alertX.remove();
+          }, 1000);
+          getBuses();
+
+        } else {
+          $("#addBusLicenseErr").text(data.licensePlateErr)
+          $("#addBusModelErr").text(data.modelErr)
+          $("#addBusCapaErr").text(data.capacityErr)
+        }
+      }).catch(error => {
+        console.error('Error:', error);
+      });
   }
+  function deleteBusPre(id) {
+    $("#deleteBusId").val(id)
+  }
+  function deleteBus() {
+    let id = $("#deleteBusId").val()
+    fetch(`/bus/delete/${id}`, {
+      method: 'DELETE',
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          $("#deleteBusClose").click();
+          let alert = `
+                    <div id="failAlert" class="alert alert-success alert-dismissible fade show position-absolute top-50 start-50 translate-middle" role="alert" style="z-index: 15000">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <p id="successMsg">${data.message}</p>
+                    </div>
+                    `
+          $("body").append(alert)
+          let alertX = $("#failAlert")
+          setTimeout(function () {
+            alertX.remove();
+          }, 1000);
+          getBuses();
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
 </script>
 
 </html>

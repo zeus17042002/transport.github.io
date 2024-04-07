@@ -41,7 +41,10 @@ router.post("/changePw", IndexController.PostChangePassword);
 router.post("/resendAccessLink", IndexController.ResendAccessLink);
 
 //Bus route
-router.get("/buses", BusController.GetBuses);
-router.put("/buses/update/:id", BusController.UpdateBus);
-router.post("/buses/add", BusController.AddBus);
+router.get("/bus", BusController.GetBuses);
+router.post("/bus/getBuses", BusController.GetBusesData);
+router.post("/bus/getBus/:id", BusController.GetBusById);
+router.put("/bus/update/:id", BusController.UpdateBus);
+router.post("/bus/add", BusController.AddBus);
+router.delete("/bus/delete/:id", BusController.DeleteBus);
 module.exports = router;
