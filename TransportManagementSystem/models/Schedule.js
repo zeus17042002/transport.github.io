@@ -11,10 +11,8 @@ const { Schema, model } = mongoose;
 const ScheduleSchema = new Schema({
     busId: {type: Schema.Types.ObjectId, ref: 'Bus'},
     routeId: {type: Schema.Types.ObjectId, ref: 'Route'},
-    departureTime: Date,
-    arriveTime: Date,
     createdAt: {type: Date, default: now},
-    status: {type: Number, default: 1},
+    status: {type: Number, default: 0},
 });
 
 const Schedule = db.model('Schedule', ScheduleSchema);

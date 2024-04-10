@@ -81,12 +81,7 @@ class IndexController {
             Err: "Sai mật khẩu",
           });
         }
-        if (!user.isChange) {
-          return res.render("index/login", {
-            body: req.body,
-            Err: "Vui lòng đăng nhập bằng link được gửi thông qua email",
-          });
-        }
+       
         req.session.userId = user._id;
         req.session.userRole = user.role;
         req.session.userName = user.name;
@@ -112,77 +107,7 @@ class IndexController {
     }
   }
 
-  async GetLoginLink(req, res) {
-    try {
-      const decoded = jwt.verify(req.params.token, secretKey, {
-        ignoreExpiration: false,
-      });
-      console.log("JWT is not expired:", decoded);
-      let email = decoded.email;
 
-      // Tìm kiếm người dùng có email tương ứng trong cơ sở dữ liệu
-      const user = await User.findOne({ email: email });
-
-      if (user) {
-        req.session.userId = user._id;
-        req.session.userName = user.name;
-        if (!user.isChange) {
-          req.session.userEmail = email;
-          return res.render("index/firstlogin", {
-            exp: true,
-            msg: "Vui lòng đổi mật khẩu trước khi phiên đăng nhập kết thúc",
-            email: email,
-            changePw: true,
-          });
-        } else {
-          // Nếu người dùng đã đổi mật khẩu, đưa họ đến trang chủ
-          return res.redirect("/"); // Điều hướng đến trang chủ (thay đổi đường dẫn tùy theo ứng dụng của bạn)
-        }
-      } else {
-        return res.render("index/firstlogin", {
-          msg: "Người dùng không tồn tại",
-        });
-      }
-    } catch (err) {
-      if (err.name === "TokenExpiredError") {
-        console.log(err);
-        const decodedE = jwt.verify(req.params.token, secretKey, {
-          ignoreExpiration: true,
-        });
-        const userE = await User.findOne({ email: decodedE.email });
-
-        if (userE) {
-          if (userE.isChange) {
-            return res.render("index/firstlogin", {
-              exp: false,
-              isChange: true,
-              msg: "Tài khoản đã kí hoạt vui lòng đăng nhập thông qua trang login",
-            });
-          }
-        }
-        console.log(decodedE.email);
-        return res.render("index/firstlogin", {
-          exp: false,
-          isChange: false,
-          msg: "Phiên đăng nhập hết hạn, hãy yêu cầu phiên đăng nhập mới",
-          email: decodedE.email,
-        });
-      } else {
-        console.log("JWT verification failed:", err);
-        return res.render("index/firstlogin", { msg: "Lỗi xác thực" });
-      }
-    }
-  }
-  async ResendAccessLink(req, res) {
-    try {
-      await sendLoginLink(req.body.email);
-      return res.status(200).json({ success: true });
-    } catch (error) {
-      return res
-        .status(500)
-        .json({ success: false, error: "Failed to send the access link" });
-    }
-  }
 
   async PostChangePassword(req, res) {
     if (!req.body.password) {
@@ -267,7 +192,7 @@ class IndexController {
         name: req.body.name,
         username: getUsernameFromEmail(req.body.email),
         pass: hashedPassword,
-        role: 1,
+        role: req.body.role,
         email: req.body.email,
         createdAt: new Date(),
         status: 1,

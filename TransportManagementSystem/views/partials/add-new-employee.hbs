@@ -1,4 +1,3 @@
-<!-- New employee dialog -->
 <div class="modal fade" id="newEmployee" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -14,16 +13,20 @@
                             <div class="form-floating mb-3">
                                 <input id="addFormName" type="text" class="form-control" name="name" value="">
                                 <label for="floatingInput">Name</label>
-                                <div class="invalid-feedback mt-3" id="addEmployeeNameErr">
-
-                                </div>
+                                <div class="invalid-feedback mt-3" id="addEmployeeNameErr"></div>
                             </div>
                             <div class="form-floating mb-3">
                                 <input id="addFormEmail" type="email" class="form-control" name="email" value="">
                                 <label for="floatingInput">Email</label>
-                                <div class="invalid-feedback mt-3" id="addEmployeeEmailErr">
-
-                                </div>
+                                <div class="invalid-feedback mt-3" id="addEmployeeEmailErr"></div>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <select id="addFormRole" class="form-control" name="role">
+                                    <option value="1">Operator</option>
+                                    <option value="2">Driver</option>
+                                </select>
+                                <label for="floatingSelect">Role</label>
+                                <div class="invalid-feedback mt-3" id="addEmployeeRoleErr"></div>
                             </div>
                         </form>
                     </main>

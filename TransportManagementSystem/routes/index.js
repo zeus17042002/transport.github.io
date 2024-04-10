@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var IndexController = require("../controllers/IndexController");
 const BusController = require("../controllers/BusController");
+const UserController = require("../controllers/UserController");
 
 router.get("/", function (req, res, next) {
   if(req.session.userId){
@@ -35,16 +36,19 @@ router.get("/login", IndexController.GetLogin);
 router.post("/login", IndexController.PostLogin);
 router.post("/addEmployee", IndexController.PostAddEmployee);
 router.get("/logout", IndexController.GetLogout);
-router.get("/routes", IndexController.GetRoutes);
 router.get("/employees", IndexController.GetEmployees);
 router.post("/changePw", IndexController.PostChangePassword);
-router.post("/resendAccessLink", IndexController.ResendAccessLink);
 
 //Bus route
 router.get("/bus", BusController.GetBuses);
 router.post("/bus/getBuses", BusController.GetBusesData);
 router.post("/bus/getBus/:id", BusController.GetBusById);
 router.put("/bus/update/:id", BusController.UpdateBus);
+router.put("/bus/updateDriver", BusController.UpdateBusDriver);
 router.post("/bus/add", BusController.AddBus);
 router.delete("/bus/delete/:id", BusController.DeleteBus);
+
+//user
+router.post("/user/getUser", UserController.findUserById)
+router.post("/user/getUserByRole", UserController.findUserByRole)
 module.exports = router;

@@ -22,7 +22,6 @@ const UserSchema = new Schema({
     createdAt: {type: Date, default: now},
     status: {type: Number, default: 1},
     avatarPath: String,
-    isChange: {type: Number, default: 0}
 });
 
 

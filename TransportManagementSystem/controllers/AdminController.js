@@ -12,7 +12,7 @@ class AdminController {
     return res.render("admin/admin-change-password");
   }
   GetEmployee(req, res) {
-    User.find({ role: 1 })
+    User.find({ role: { $in: [1, 2] } })
       .then((users) => {
         let result = [];
         users.forEach((user) => {

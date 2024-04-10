@@ -1,0 +1,57 @@
+<!-- New Product dialog -->
+<div class="modal fade" id="newRoute" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Thêm tuyến đường mới</h1>
+                <button id="addProductClose" type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form style="max-width: 500px;" class="m-auto" id="addProductForm"
+                        action="/routes/add" method="post">
+                <div class="form-group">
+                            <label for="busId">Lựa chọn xe</label>
+                            <select name="busId">
+                                <option value="661163afd516636314484ff0">School Bus</option>
+                            </select>
+                            <div class="mb-3">
+                                <input placeholder="Tên tuyến đường" id="addFormBarcode" type="text" class="form-control" name="routeName">
+                                {{!-- <div class="invalid-feedback mt-3" id="addProductBarcodeErr"> --}}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <input placeholder="Điểm đi" id="addFormProductName" type="text" class="form-control" name="start">
+                                <div class="invalid-feedback mt-3" id="addProductNameErr">
+
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <input placeholder="Điểm đến" id="addFormImportPrice" type="text" class="form-control" name="end">
+                                <div class="invalid-feedback mt-3" id="addProductImportPriceErr">
+
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <input placeholder="Khoảng cách" id="addFormPrice" type="number" class="form-control" name="distance" >
+                                
+                                <div class="invalid-feedback mt-3" id="addProductPriceErr">
+
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <input placeholder="Giá vé" id="addFormDescription" type="number" class="form-control" name="fare" >
+                                <div class="invalid-feedback mt-3" id="addProductDescriptionErr">
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                <button type="submit" class="btn btn-success">Thêm</button>
+                            </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

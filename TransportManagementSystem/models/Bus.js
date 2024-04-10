@@ -15,6 +15,7 @@ const BusSchema = new Schema({
     img: {type: String, default: 'img.png'},
     createdAt: {type: Date, default: Date.now},
     status: {type: Number, default: 1},
+    employeeId: {type: Schema.Types.ObjectId, ref: 'User'}
 });
 
 const Bus = db.model('Bus', BusSchema);

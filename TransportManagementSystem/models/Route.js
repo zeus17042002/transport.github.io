@@ -8,12 +8,15 @@ var db = mongoose.createConnection(
 const { Schema, model } = mongoose;
 
 const RouteSchema = new Schema({
+    busId: {type: Schema.Types.ObjectId, ref: 'Bus'},
     routeName: String,
     start: String,
     end: String,
     distance : Number,
-    duration: Number,
     fare: Number,
+    departureDayTime: {type: Date, default: now},
+    fuelInit: {type: Number, default: 0},
+    fuelCost: {type: Number, default: 0},
     createdAt: {type: Date, default: now},
     status: {type: Number, default: 1}
 });

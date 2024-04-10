@@ -10,6 +10,34 @@ const fs = require("fs");
 const mv = require("mv");
 
 class UserController {
+  async findUserById(req, res){
+    User.find({_id : req.body.id}).then(users=>{
+      if(!users){
+        return res.status(404).json({
+          success: false,
+          message: "Không tìm thấy"
+        })
+      }
+      return res.status(200).json({
+        success: true,
+        users: users
+      })
+    })
+  }
+  async findUserByRole(req, res){
+    User.find({role : req.body.role}).then(users=>{
+      if(!users){
+        return res.status(404).json({
+          success: false,
+          message: "Không tìm thấy"
+        })
+      }
+      return res.status(200).json({
+        success: true,
+        users: users
+      })
+    })
+  }
   async PutUpdateEmployee(req, res) {
     await body("name")
       .notEmpty()

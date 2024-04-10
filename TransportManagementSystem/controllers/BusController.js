@@ -17,7 +17,7 @@ class BusController {
           result.push(buses._doc);
         });
         return res.render("admin/bus-management", {
-          buses: result,          
+          buses: result,
         });
       })
       .catch((err) => {
@@ -27,7 +27,7 @@ class BusController {
         });
       });
   }
-  async GetBusesData(req,res){
+  async GetBusesData(req, res) {
     Bus.find()
       .then((buses) => {
         if (!buses) {
@@ -42,8 +42,8 @@ class BusController {
         });
         return res.status(200).json({
           success: true,
-          buses: result
-        })
+          buses: result,
+        });
       })
       .catch((err) => {
         return res.status(500).json({
@@ -53,7 +53,7 @@ class BusController {
       });
   }
   async GetBusById(req, res) {
-    console.log(req.params.id)
+    console.log(req.params.id);
     Bus.findById(req.params.id)
       .then((bus) => {
         if (!bus) {
@@ -102,7 +102,7 @@ class BusController {
     const errors = validationResult(req);
     let { licensePlateErr, modelErr, capacityErr } = "";
     if (!errors.isEmpty()) {
-      console.log(errors)
+      console.log(errors);
       errors.array().forEach((err) => {
         switch (err.path) {
           case "licensePlate":
@@ -117,7 +117,7 @@ class BusController {
       });
       return res.status(400).json({
         success: false,
-        message:"Lỗi Thông Số",
+        message: "Lỗi Thông Số",
         body: req.body,
         modelErr: modelErr,
         licensePlateErr: licensePlateErr,
@@ -132,24 +132,28 @@ class BusController {
       });
 
       await newBus.save();
-      return res.status(200).json({ success: true, message: "Thêm thành công" });
+      return res
+        .status(200)
+        .json({ success: true, message: "Thêm thành công" });
     } catch (err) {
       console.log(err);
       return res.status(500);
     }
   }
   async DeleteBus(req, res) {
-    Bus.findByIdAndDelete(req.params.id).then(bus=>{
-      return res.status(200).json({
-        success: true,
-        message: "Xóa thành công"
+    Bus.findByIdAndDelete(req.params.id)
+      .then((bus) => {
+        return res.status(200).json({
+          success: true,
+          message: "Xóa thành công",
+        });
       })
-    }).catch(err=>{
-      return res.status(500).json({
-        success: false,
-        message: err.message
-      })
-    })
+      .catch((err) => {
+        return res.status(500).json({
+          success: false,
+          message: err.message,
+        });
+      });
   }
   async UpdateBus(req, res) {
     await body("licensePlate")
@@ -208,7 +212,7 @@ class BusController {
 
       // Cập nhật thông tin của xe nếu tìm thấy
       const updatedBus = await Bus.findOneAndUpdate(
-        {_id: req.params.id  },
+        { _id: req.params.id },
         {
           licensePlate: req.body.licensePlate,
           _model: req.body.model,
@@ -229,6 +233,29 @@ class BusController {
         error: error.message,
       });
     }
+  }
+  async UpdateBusDriver(req, res) {
+    Bus.findByIdAndUpdate(req.body.id, {
+      employeeId: req.body.employeeId,
+    })
+      .then((bus) => {
+        if (!bus) {
+          return res.status(404).json({
+            success: false,
+            message: "Không tìm thấy",
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          message: "Thêm/Thay đổi tài xế thành công",
+        });
+      })
+      .catch((err) => {
+        return res.status(500).json({
+          success: false,
+          message: err.message,
+        });
+      });
   }
 }
 

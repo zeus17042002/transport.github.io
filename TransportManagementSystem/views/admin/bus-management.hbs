@@ -126,15 +126,20 @@
       <table class="table table-bordered">
         <thead class="thead-dark">
           <tr>
+            <th>Hình Ảnh</th>
             <th>Biển Số</th>
             <th>Loại Xe</th>
             <th>Sức Chứa</th>
+            <th>Tài Xế</th>
             <th>Thao tác</th>
           </tr>
         </thead>
         <tbody id="buses-container">
           {{#each buses}}
-          <tr>
+          <tr class="text-center">
+            <td class="text-center">
+              <img class="rounded" src="./images/buses/{{img}}" alt="">
+            </td>
             <td>
               {{licensePlate}}
             </td>
@@ -145,7 +150,7 @@
               {{capacity}}
             </td>
             <td>
-              <button class="btn btn-success" onclick="getBus('{{_id}}') " data-bs-toggle="modal"
+              <button class="btn btn-primary" onclick="getBus('{{_id}}') " data-bs-toggle="modal"
                 data-bs-target="#updateBus">
                 Sửa
               </button>
@@ -208,27 +213,39 @@
           let tr = '';
 
           data.buses.forEach(bus => {
-            tr += `
-        <tr>
-            <td>${bus.licensePlate}</td>
-            <td>${bus._model}</td>
-            <td>${bus.capacity}</td>
-            <td>
-              <button class="btn btn-success" onclick="getBus('{{_id}}') " data-bs-toggle="modal"
-                data-bs-target="#updateBus">
-                Sửa
-              </button>            
-                <button class="btn btn-danger" onclick="deleteBusPre('{{_id}}')" data-bs-toggle="modal" data-bs-target="#deleteBus">Xóa
-              </button>
+            getDriverById(bus.employeeId)
+              .then(user => {
+                  var users = user;
+                  let hasEmployee = bus.employeeId ? users.name+`\t<button class="btn btn-primary" onclick="openNewDriver('${bus._id}')" data-bs-toggle="modal" data-bs-target="#addDriver">Đổi
+                        </button>` : `<button class="btn btn-success" onclick="openNewDriver('${bus._id}')" data-bs-toggle="modal" data-bs-target="#addDriver">Thêm
+                        </button>`;
+                  tr += `
+                  <tr class="text-center">
+                      <td class="text-center"><img class="rounded" src="./images/buses/${bus.img}" alt=""></td>
 
-            </td>
-        </tr>
-    `;
+                      <td>${bus.licensePlate}</td>
+                      <td>${bus._model}</td>
+                      <td>${bus.capacity}</td>
+                      <td>${hasEmployee}</td>
+                      <td>
+                        <button class="btn btn-primary" onclick="getBus('{{_id}}')" data-bs-toggle="modal"
+                          data-bs-target="#updateBus">
+                          Sửa
+                        </button>            
+                        <button class="btn btn-danger" onclick="deleteBusPre('{{_id}}')" data-bs-toggle="modal" data-bs-target="#deleteBus">Xóa
+                        </button>
+                      </td>
+                  </tr>
+                `;
+                
+                $("#buses-container").html(tr);
+              })
+              .catch(error => {
+                // Handle error
+                console.error('Error:', error);
+              });
           });
-
-          $("#buses-container").html(tr);
         } else {
-
           console.log(data.message);
         }
       })
@@ -236,7 +253,108 @@
         console.error('There was a problem with the fetch operation:', error);
       });
   }
+  function openNewDriver(id){
+    $("#addDriverDusId").val(id)
+  }
+  getDrivers()
+  function getDrivers() {
+    fetch('/user/getUserByRole', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        role: 2
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          let driversList = ""
+          data.users.forEach(user => {
+            console.log(user)
+            driversList += `<div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 mb-3">
+                <div class="card">
+                    <img src="/images/users/${user.avatarPath}" class="card-img-top" alt="...">
 
+                    <div class="card-body">
+                        <h5 class="card-title">${user.name}</h5>
+                        <a href="#" class="btn btn-primary" onclick="addNewDriver('${user._id}')">Chọn</a>
+                    </div>
+                </div>
+            </div>`
+        });
+        $("#drivers-container").html(driversList)
+
+        } else {
+          // Handle unsuccessful response
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+  function addNewDriver(id){
+    fetch(`/bus/updateDriver`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: $("#addDriverDusId").val(),
+        employeeId: id
+      }),
+    })
+      .then(response => response.json()) // Assuming the server responds with JSON
+      .then(data => {
+        if (data.success) {
+          $("#addDriveClose").click();
+
+          getBuses();
+          let alert = `
+                    <div id="failAlert" class="alert alert-success alert-dismissible fade show position-absolute top-50 start-50 translate-middle" role="alert" style="z-index: 15000">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <p id="successMsg">${data.message}</p>
+                    </div>
+                    `
+          $("body").append(alert)
+          let alertX = $("#failAlert")
+          setTimeout(function () {
+            alertX.remove();
+          }, 1000);
+        } else {
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+  function getDriverById(id) {
+    return fetch('/user/getUser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: id
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          return data.users[0];
+        } else {
+          // Handle unsuccessful response
+          return null;
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        return null;
+      });
+  }
+
+  getBuses()
   function updateBus() {
     let id = $("#updateBusId").val();
     let licensePlate = $("#updateBusLP").val();
@@ -270,7 +388,7 @@
           setTimeout(function () {
             alertX.remove();
           }, 1000);
-        }else{
+        } else {
           $("#updateBusLicenseErr").text(data.licensePlateErr)
           $("#updateBusModelErr").text(data.modelErr)
           $("#updateBusCapaErr").text(data.capacityErr)
