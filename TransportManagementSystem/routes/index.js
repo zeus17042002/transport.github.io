@@ -10,6 +10,7 @@ router.get("/", function (req, res, next) {
       title: "TdtuSales",
       userId: req.session.userId,
       userName: req.session.userName,
+      userRole: req.session.userRole,
     });
   }else{
     return res.redirect("/login")

@@ -14,9 +14,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <link rel="icon" type="image/x-icon" href="/images/logo.png">
-    <link rel="stylesheet" href="/stylesheets/login.css">
-    <link rel="stylesheet" href="/stylesheets/home.css">
-  
+  <link rel="stylesheet" href="/stylesheets/login.css">
+  <link rel="stylesheet" href="/stylesheets/home.css">
+
   <style>
     .invalid-feedback {
       display: block !important
@@ -49,7 +49,7 @@
     .image-container:hover .change-image-button {
       display: block;
       opacity: 1;
-      background-color: hsla(0, 0%,98%, 1)
+      background-color: hsla(0, 0%, 98%, 1)
     }
   </style>
 </head>
@@ -60,6 +60,10 @@
     {{> bus-delete}}
     {{> bus-update}}
     {{> driver-add-new}}
+
+    {{> add-new-employee}}
+    {{> change-employee-status}}
+    {{> update-employee}}
     {{{body}}}
   </div>
 
@@ -76,5 +80,6 @@
   </div>
   {{/if}}
 </body>
+
 
 </html>

@@ -4,6 +4,9 @@ var { body, validationResult } = require("express-validator");
 
 class BusController {
   async GetBuses(req, res) {
+    if (!req.session.userId) {
+      return res.redirect("/login");
+    }
     Bus.find()
       .then((buses) => {
         if (!buses) {
@@ -18,6 +21,9 @@ class BusController {
         });
         return res.render("admin/bus-management", {
           buses: result,
+          userId: req.session.userId,
+          userName: req.session.userName,
+          userRole: req.session.userRole
         });
       })
       .catch((err) => {

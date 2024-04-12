@@ -10,11 +10,9 @@ const crypto = require("crypto");
 var nodemailer = require("nodemailer");
 var jwt = require("jsonwebtoken");
 
-
-
 class IndexController {
   //Management part
-  async GetRoutes(req,res){
+  async GetRoutes(req, res) {
     if (!req.session.userId) {
       return res.render("index/login");
     } else {
@@ -22,11 +20,30 @@ class IndexController {
     }
   }
 
-  async GetEmployees(req,res){
+  async GetEmployees(req, res) {
     if (!req.session.userId) {
-      return res.render("index/login");
+      return res.redirect("/login");
     } else {
-      return res.render("admin/employee-management");
+      User.find({ role: { $in: [1, 2] } })
+        .then((users) => {
+          let result = [];
+          users.forEach((user) => {
+            result.push(user._doc);
+          });
+          return res.render("admin/employee-management", {
+            success: true,
+            Users: result,
+            userId: req.session.userId,
+            userName: req.session.userName,
+            userRole: req.session.userRole,
+          });
+        })
+        .catch((err) => {
+          return res.render("admin/employee-management", {
+            success: false,
+            msg: err,
+          });
+        });
     }
   }
 
@@ -81,20 +98,12 @@ class IndexController {
             Err: "Sai mật khẩu",
           });
         }
-       
+
         req.session.userId = user._id;
         req.session.userRole = user.role;
         req.session.userName = user.name;
         req.session.userStatus = user.status;
-        if (user.role == 0) {
-          return res.redirect("/admin");
-        } else {
-          if (user.status) {
-            return res.redirect("/");
-          } else {
-            return res.render("lock");
-          }
-        }
+        return res.redirect("/");
       } else {
         console.log("Tài khoản không tồn tại");
         return res.render("index/login", {
@@ -106,8 +115,6 @@ class IndexController {
       console.log(err);
     }
   }
-
-
 
   async PostChangePassword(req, res) {
     if (!req.body.password) {
@@ -243,6 +250,5 @@ function generateSecretKey() {
   // Generate a random 32-byte (256-bit) secret key using a strong cryptographic algorithm
   return crypto.randomBytes(32).toString("hex");
 }
-
 
 module.exports = new IndexController();

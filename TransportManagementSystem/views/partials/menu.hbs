@@ -1,20 +1,46 @@
+<ul>
+  <li><a href="/">Trang chủ</a></li>
+  {{#if_eq userRole 1}}
+  <li id="quanLyXeMenu">
+    <a href="/bus">Quản lý xe</a>
+    <div id="menuConQuanLyXe" class="menu-con">
+      <a href="javascript:void(0);">Nhập liệu</a>
+      <a href="javascript:void(0);">Cập nhật thông tin</a>
+      <a href="javascript:void(0);">Kiểm tra vị trí</a>
+      <a href="javascript:void(0);">Quản lý hoạt động trên xe</a>
+      <a href="javascript:void(0);">Thống kê dữ liệu</a>
+      <a href="javascript:void(0);">Nhận cảnh báo</a>
+      <a href="javascript:void(0);">Truy xuất dữ liệu</a>
+    </div>
+  </li>
+  <li><a href="/routes">Quản lý tuyến xe</a></li>
+  {{/if_eq}}
+  {{#if_eq userRole 0}}
+  <li id="quanLyXeMenu">
+    <a href="/bus">Quản lý xe</a>
+    <div id="menuConQuanLyXe" class="menu-con">
+      <a href="javascript:void(0);">Nhập liệu</a>
+      <a href="javascript:void(0);">Cập nhật thông tin</a>
+      <a href="javascript:void(0);">Kiểm tra vị trí</a>
+      <a href="javascript:void(0);">Quản lý hoạt động trên xe</a>
+      <a href="javascript:void(0);">Thống kê dữ liệu</a>
+      <a href="javascript:void(0);">Nhận cảnh báo</a>
+      <a href="javascript:void(0);">Truy xuất dữ liệu</a>
+    </div>
+  </li>
+  <li><a href="/routes">Quản lý tuyến xe</a></li>
+  <li><a href="/employees">Quản lý nhân viên</a></li>
 
-  <ul>
-    <li><a href="/">Trang chủ</a></li>
-    <li id="quanLyXeMenu">
-      <a href="/bus">Quản lý xe</a>
-      <div id="menuConQuanLyXe" class="menu-con">
-        <a href="javascript:void(0);">Nhập liệu</a>
-        <a href="javascript:void(0);">Cập nhật thông tin</a>
-        <a href="javascript:void(0);">Kiểm tra vị trí</a>
-        <a href="javascript:void(0);">Quản lý hoạt động trên xe</a>
-        <a href="javascript:void(0);">Thống kê dữ liệu</a>
-        <a href="javascript:void(0);">Nhận cảnh báo</a>
-        <a href="javascript:void(0);">Truy xuất dữ liệu</a>
-      </div>
-    </li>
-    <li><a href="/routes">Quản lý tuyến xe</a></li>
-    <li><a href="/employees">Quản lý nhân viên</a></li>
-    <li><a href="bao-cao.html">Báo cáo</a></li>
-
-  </ul>
+  {{/if_eq}}
+  <li><a href="bao-cao.html">Báo cáo</a></li>
+  <li>
+    <a href="/users">
+      <span>{{userName}}</span>
+    </a>
+  </li>
+  <li>
+    <a href="/logout">
+      <i class="fa fa-sign-out"></i>
+    </a>
+  </li>
+</ul>
