@@ -1,6 +1,5 @@
 var User = require("../models/User");
 var Bus = require("../models/Bus");
-var Customer = require("../models/Customer");
 var Park = require("../models/Park");
 var Route = require("../models/Route");
 var Schedule = require("../models/Schedule");
