@@ -140,16 +140,11 @@
 
 <body>
   <div id="menu">
-
-    {{> menu}}
+      {{> menu}}
   </div>
   <div class="container mt-4"> <!-- Added margin-top here -->
     <!-- Search Bar and Buttons -->
-
-    {{#if userRole}}
-    {{else}}
-      <button class="route-add-btn" data-bs-toggle="modal" data-bs-target="#newRoute">Thêm tuyến đường</button>
-    {{/if}}
+    <button class="route-add-btn" data-bs-toggle="modal" data-bs-target="#newRoute">Thêm tuyến đường</button>
     <div class="search-bar input-group mb-3">
       <input type="text" class="form-control route-input" placeholder="Từ khóa..." aria-label="Từ khóa">
       <div class="input-group-append">
@@ -170,11 +165,9 @@
         <thead class="thead-dark">
           <tr>
             <th>Tên tuyến đường</th>
-            <th>Địa điểm đi</th>
-            <th>Địa điểm đến</th>
+            <th>Bảng số xe</th>
+            <th>Tên nhân viên</th>
             <th>Ngày khởi hành</th>
-            <th>Khoảng cách</th>
-            <th>Phí chuyến đi</th>
             <th>Trạng Thái</th>
             <th>
                 Thao tác
@@ -194,8 +187,8 @@
               {{checkRouteStatus this.status}}
             </td>
             {{#if ../userRole}}
-              <td id="{{this._id}}">
-                  <button class="btn btn-outline-success mb-1" onclick='addSchedule("{{this._id}}","{{../userId}}")'>Đăng ký tuyến</button>
+              <td>
+                  <button class="btn btn-outline-success mb-1" onclick='changeEditForm("{{this._id}}", "{{this.routeName}}","{{this.start}}", "{{this.end}}", {{this.distance}}, {{this.fare}}, {{this.status}})' data-bs-toggle="modal" data-bs-target="#editRoute">Đăng ký tuyến</button>
               </td>
             {{else}}
               <td>
@@ -210,15 +203,38 @@
     </div>
   </div>
 
-  {{> add-new-route}}
-  {{> edit-route}}
-
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.2/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="/javascript/route.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
+    var data;
+    var table = document.getElementById("tableBody");
+
+    function getRouteById(id){
+        return fetch(`/routes/get/${id}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }).then(data => {
+            if(data.success){
+              return data.route
+            }else{
+              console.log("Loi roi day");
+            }
+        })
+        .catch(error => {
+              console.error('Error:', error);
+              return null;
+            });
+    }
+
     function getEmployee(id){
         return fetch('/user/getUser', {
             method: 'POST',
@@ -244,89 +260,137 @@
             });
     }
 
-    function getBuses(userId) {
-     return fetch('/bus/getBuses', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        if (data.success) {
-          return data.buses;
-        } else {
-          console.log(data.message);
-        }
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-  }
-
-    function addSchedule(routeId, userId){
-      getBuses(userId).then(buses => {
-        var busId = "";
-        for(var i = 0; i < buses.length; i++){
-          console.log(buses[i]);
-          if(buses[i].employeeId === userId){
-              busId = buses[i]._id;
-              break;
-          }
-        }
-        fetch("/schedules/add", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-              routeId: routeId,
-              employeeId: userId,
-              busId: busId  
-          }),
-        }).then(response => response.json()).
-        then(data => {
-          if(data.success){
-            swal.fire({
-              icon: "success",
-              title: data.msg,
-              showConfirmButton: false,
-              heightAuto: false,
-            })
-          }else{
-            console.log(data.msg);
-          }
-        })
-      })
-      /*fetch("/routes/add", {
+    function getBusById(id) {
+      return fetch(`/bus/getBus/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-              routeId: routeId,
-              
-        }),
-      }).then(response => response.json()).
-      then(data => {
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.success) {
+            return data.bus;
+          } else {
+            console.log("Loi o dau roi do");
+          }
+        })
+    }
+
+    console.log({{admin}});
+    console.log("{{userId}}");
+
+    function getSchedules(){
+      fetch('/schedules/getData',{
+        method: "GET",
+        headers:{
+          'Content-Type': 'application/json',
+        }
+      }).then(response => response.json())
+      .then(data => {
         if(data.success){
-          swal.fire({
-            icon: "success",
-            title: data.msg,
-            showConfirmButton: false,
-            heightAuto: false,
+          data.schedules.forEach((s, i) => {
+            var status = "";
+            if(s.status === 1){
+              status = "Đã khởi hành";
+            }else if(s.status === 0){
+              status = "Chưa khởi hành";
+            }else{
+              status = "Đã hủy lịch";
+            }
+            var id = "s-" + i;
+            var string = `
+              <tr id="${id}" style="cursor:pointer" onclick=''>
+                <td class="route"></td>
+                <td class="lisence"></td>
+                <td class="name"></td>
+                <td class="day"></td>
+                <td>${status}</td>
+                <td>
+                  <button class="btn btn-outline-danger mb-1" onclick='deleteSchedule("${s._id}")'>Hủy lịch</button>
+                </td>
+              </tr>
+            `;
+            
+            $("#tableBody").append(string);
+            getEmployee(s.employeeId).then(u => {
+              var string = "#s-" + i + " .name";
+              $(string).html(u[0].name);
+            })
+            getBusById(s.busId).then((bus) => {
+              var string = "#s-" + i + " .lisence";
+              $(string).html(bus.licensePlate);
+            })
+            getRouteById(s.routeId).then(r => {
+              var string1 = "#s-" + i + " .route";
+              var string2 = "#s-" + i + " .day";
+              $(string1).html(r.routeName);
+              $(string2).html(r.departureDayTime);
+              dateTime(string2);
+            })
           })
         }else{
-          console.log("Loi o dau roi daay");
+          console.log("Loi o dau do roi")
         }
-      })*/
+      })
+      .catch(error => {
+              console.error('Error:', error);
+              return null;
+            });
     }
+
+  getSchedules()
+
+  function dateTime(id){
+    var d = document.querySelector(id);
+    console.log((d.innerHTML))
+    var date = d.innerHTML.slice(0,10).split("-");
+    console.log(date);
+    var time = d.innerHTML.slice(11, 19)
+    console.log(time);
+    var dateafterchange = date[2] + "/" + date[1] + "/" +date[0];
+    d.innerHTML = dateafterchange + " - " + time;
+  }
+
+  function deleteSchedule(id){
+    fetch('/schedules/delete', {
+      method: "POST",
+      headers:{
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        _id: id
+      }),
+    }).then(response => response.json())
+    .then(data => {
+      if (data.success){
+        swal.fire({
+          icon: "success",
+          title: data.msg,
+          showConfirmButton: false,
+          heightAuto: false,
+        })
+        setTimeout(() => {
+          window.location.href = "/schedules";
+        }, 1000);
+      }else{
+        swal.fire({
+          icon: "success",
+          title: data.msg,
+          showConfirmButton: false,
+          heightAuto: false,
+        })
+      }
+    })
+  }
   </script>
 </body>
+
+
 
 </html>

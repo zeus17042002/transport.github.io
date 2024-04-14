@@ -22,11 +22,36 @@ class AdminController {
           layout: "admin-layout",
           error: false,
           Users: result,
+          userId: req.session.userId,
+          userName: req.session.userName,
+          userRole: req.session.userRole,
         });
       })
       .catch((err) => {
         return res.render("admin/employee", {
           layout: "admin-layout",
+          error: true,
+          msg: err,
+        });
+      });
+  }
+  GetDrivers(req, res) {
+    User.find({ role: 2 })
+      .then((users) => {
+        let result = [];
+        users.forEach((user) => {
+          result.push(user._doc);
+        });
+        return res.render("admin/driver-management", {
+          error: false,
+          Users: result,
+          userId: req.session.userId,
+          userName: req.session.userName,
+          userRole: req.session.userRole,
+        });
+      })
+      .catch((err) => {
+        return res.render("admin/driver-management", {
           error: true,
           msg: err,
         });
@@ -43,9 +68,6 @@ class AdminController {
         });
       }
     });
-  }
-  GetProduct(req, res) {
-    return res.render("admin/product", { layout: "admin-layout" });
   }
   PutStatusEmp(req, res) {
     User.findOne({ email: req.body.email })
@@ -64,10 +86,10 @@ class AdminController {
             { status: newStatus }
           )
             .then(() => {
-              return res.status(200).json({ 
+              return res.status(200).json({
                 success: true,
-                message: "Thay đổi thành công"
-               });
+                message: "Thay đổi thành công",
+              });
             })
             .catch((error) => {
               return res.status(500).json({

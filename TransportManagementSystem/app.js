@@ -11,6 +11,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var adminRouter = require("./routes/admin");
 var routesRouter = require("./routes/routes");
+var schedulesRouter = require('./routes/schedules');
 var { formatDate } = require("./helpers/FormatInfo");
 var app = express();
 
@@ -47,6 +48,15 @@ app.engine(
           return opts.fn(this);
         else return opts.inverse(this);
       },
+      checkRouteStatus: function(check){
+        if(check == 1){
+          return "Còn hoạt động";
+        }else if(check == 0){
+          return "Đã đóng";
+        }else{
+          return "Trạng thái không hợp lệ";
+        }
+      }
     },
   })
 );
@@ -80,6 +90,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/admin", adminRouter);
 app.use("/routes", routesRouter);
+app.use('/schedules', schedulesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

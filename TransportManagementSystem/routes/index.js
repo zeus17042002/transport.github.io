@@ -3,6 +3,7 @@ var router = express.Router();
 var IndexController = require("../controllers/IndexController");
 const BusController = require("../controllers/BusController");
 const UserController = require("../controllers/UserController");
+const AdminController = require("../controllers/AdminController");
 
 router.get("/", function (req, res, next) {
   if(req.session.userId){
@@ -42,6 +43,7 @@ router.post("/changePw", IndexController.PostChangePassword);
 
 //Bus route
 router.get("/bus", BusController.GetBuses);
+router.get("/drivers", AdminController.GetDrivers);
 router.post("/bus/getBuses", BusController.GetBusesData);
 router.post("/bus/getBus/:id", BusController.GetBusById);
 router.put("/bus/update/:id", BusController.UpdateBus);
@@ -52,4 +54,6 @@ router.delete("/bus/delete/:id", BusController.DeleteBus);
 //user
 router.post("/user/getUser", UserController.findUserById)
 router.post("/user/getUserByRole", UserController.findUserByRole)
+
+
 module.exports = router;

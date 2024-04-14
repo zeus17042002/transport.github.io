@@ -14,6 +14,7 @@
     </div>
   </li>
   <li><a href="/routes">Quản lý tuyến xe</a></li>
+  <li><a href="/drivers">Quản lý tài xế</a></li>
   {{/if_eq}}
   {{#if_eq userRole 0}}
   <li id="quanLyXeMenu">
@@ -33,6 +34,8 @@
 
   {{/if_eq}}
   <li><a href="bao-cao.html">Báo cáo</a></li>
+  <li><a href="/routes">Xem các tuyến xe</a></li>
+  <li><a href="/schedules">Xem lịch trình</a></li>
   <li>
     <a href="/users">
       <span>{{userName}}</span>

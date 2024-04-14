@@ -7,5 +7,6 @@ router.get("/", RoutesController.GetRoutes);
 router.post("/add", RoutesController.AddRoute);
 router.post("/edit/:id", RoutesController.EditRoute);
 router.get("/delete/:id", RoutesController.DeleteRoute);
+router.get("/get/:id", RoutesController.GetRouteById);
 
 module.exports = router;
