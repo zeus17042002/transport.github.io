@@ -1,0 +1,27 @@
+<!-- New Product dialog -->
+<div class="modal fade" id="report" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Báo cáo hoàn thành</h1>
+                <button id="addProductClose" type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form style="max-width: 500px;" class="m-auto" id="addProductForm">
+                    <div class="form-group">
+                        <input type="hidden" id="scheduleId">
+                        <input type="hidden" id="index">
+                    </div>
+                    <div class="form-group">
+                        <textarea id="reportText" name="report" rows="4" cols="50" required>
+                        </textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="reportClose" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" onclick="finishSchedule()" class="btn btn-success">Xác nhận</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

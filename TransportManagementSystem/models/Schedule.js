@@ -16,7 +16,8 @@ const ScheduleSchema = new Schema({
     status: {type: Number, default: 0},
     fuelInit: {type: Number, default: 0},
     fuelCost: {type: Number, default: 0},
-    arrivalTime: {type: Date, default: now}
+    arrivalTime: {type: Date, default: now},
+    report: String
 });
 
 const Schedule = db.model('Schedule', ScheduleSchema);

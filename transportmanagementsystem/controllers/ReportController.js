@@ -7,28 +7,15 @@ const assert = require('assert');
 const session = require("express-session");
 
 class RoutesController{
-    async GetRoutes(req, res){
-      console.log(req.session.userRole);
+    async GetReport(req, res){
         if(!req.session.userId){
             return res.render("index/login");
         }else{
-                var routes = Route.find().
-            then((routes) => {
-                var result = [];
-                routes.forEach((route) => {
-                    result.push(route._doc);
-                })
-                if(req.session.userRole === 0 || req.session.userRole === 1){
-                    return res.render("routes", {routes: result, userRole: req.session.userRole,userId: req.session.userId, userName: req.session.userName, admin: true});
-                }else{
-                    return res.render("routes", {routes: result, userRole: req.session.userRole, userId: req.session.userId, userName: req.session.userName});
-                }
-            }).catch(err => {
-                return res.status(500).json({
-                    success: false, 
-                    message: "Error",
-                  });
-            });
+            if(req.session.userRole === 0 || req.session.userRole === 1){
+                return res.render("admin-report", {userRole: req.session.userRole,userId: req.session.userId, userName: req.session.userName, admin: true});
+            }else{
+                return res.redirect("/")
+            }
         }
     }
 

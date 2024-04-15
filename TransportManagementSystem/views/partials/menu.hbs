@@ -14,7 +14,14 @@
     </div>
   </li>
   <li><a href="/routes">Quản lý tuyến xe</a></li>
-  <li><a href="/drivers">Quản lý tài xế</a></li>
+  <li><a href="/schedules">Quản lý lịch trình</a></li>
+  <li id="quanLyXeMenu">
+      <a href="#">Báo cáo</a>
+      <div id="menuConQuanLyXe" class="menu-con">
+      <a href="/report">Xem lịch trình đã hoàn thành</a>
+      <a href="#">Xuất báo cáo</a>
+    </div>
+    </li>
   {{/if_eq}}
   {{#if_eq userRole 0}}
   <li id="quanLyXeMenu">
@@ -30,12 +37,28 @@
     </div>
   </li>
   <li><a href="/routes">Quản lý tuyến xe</a></li>
+  <li><a href="/schedules">Quản lý lịch trình</a></li>
   <li><a href="/employees">Quản lý nhân viên</a></li>
-
+  <li id="quanLyXeMenu">
+      <a href="#">Báo cáo</a>
+      <div id="menuConQuanLyXe" class="menu-con">
+      <a href="/report">Xem lịch trình đã hoàn thành</a>
+      <a href="#">Xuất báo cáo</a>
+    </div>
+    </li>
   {{/if_eq}}
-  <li><a href="bao-cao.html">Báo cáo</a></li>
-  <li><a href="/routes">Xem các tuyến xe</a></li>
-  <li><a href="/schedules">Xem lịch trình</a></li>
+  {{#if_eq userRole 2}}
+    <li><a href="/routes">Xem các tuyến xe</a></li>
+    <li><a href="/schedules">Xem lịch trình</a></li>
+    <li id="quanLyXeMenu">
+      <a href="#">Báo cáo</a>
+      <div id="menuConQuanLyXe" class="menu-con">
+      <a href="javascript:void(0);">Nhập báo cáo tình trạng xe</a>
+      <a href="#">Báo cáo kết thúc lịch trình</a>
+    </div>
+    </li>
+  {{/if_eq}}
+  
   <li>
     <a href="/users">
       <span>{{userName}}</span>

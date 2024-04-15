@@ -58,6 +58,33 @@ class BusController {
         });
       });
   }
+  async GetBusDetailById(req, res) {
+    console.log(req.params.id);
+    Bus.findById(req.params.id)
+      .then((bus) => {
+        if (!bus) {
+          return res.status(404).json({
+            success: false,
+            message: "Can found any bus in database",
+          });
+        }
+        let result = [];
+        result.push(bus._doc);
+        return res.render("admin/bus-detail", {
+          bus: result,
+          busId: req.params.id,
+          userId: req.session.userId,
+          userName: req.session.userName,
+          userRole: req.session.userRole
+        });
+      })
+      .catch((err) => {
+        return res.status(500).json({
+          success: false,
+          message: err,
+        });
+      });
+  }
   async GetBusById(req, res) {
     console.log(req.params.id);
     Bus.findById(req.params.id)

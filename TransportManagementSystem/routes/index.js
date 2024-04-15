@@ -43,6 +43,7 @@ router.post("/changePw", IndexController.PostChangePassword);
 
 //Bus route
 router.get("/bus", BusController.GetBuses);
+router.get("/bus/:id", BusController.GetBusDetailById);
 router.get("/drivers", AdminController.GetDrivers);
 router.post("/bus/getBuses", BusController.GetBusesData);
 router.post("/bus/getBus/:id", BusController.GetBusById);

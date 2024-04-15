@@ -140,7 +140,7 @@
 
 <body>
   <div id="menu">
-      {{> menu}}
+    {{> menu}}
   </div>
   <div class="container mt-4"> <!-- Added margin-top here -->
     <!-- Search Bar and Buttons -->
@@ -168,6 +168,7 @@
             <th>Tên nhân viên</th>
             <th>Ngày khởi hành</th>
             <th>Trạng Thái</th>
+            <th>Feedback</th>
             <th>
                 Thao tác
             </th>
@@ -180,12 +181,11 @@
     </div>
   </div>
 
-  {{> finish-schedule}}
-
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.2/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/javascript/route.js"></script>
   <script>
     var data;
     var table = document.getElementById("tableBody");
@@ -273,44 +273,24 @@
       .then(data => {
         if(data.success){
           data.schedules.forEach((s, i) => {
-            if(s.status === 2 && {{userRole}} !== 2){ 
-            }else{
               var status = "";
               var btn = "";
-              if(s.status === 1){
-                status = "Đã khởi hành";
-                if(data.driver){
-                  btn = `
-                  <button class="btn btn-outline-warning mb-1" onclick='report("${s._id}")'>Báo cáo sự cố</button>
-                  <button class="btn btn-outline-success mb-1" data-bs-toggle="modal" data-bs-target="#report" onclick='openReport("${s._id}","${i}")'>Hoàn thành</button>
-                  `;
-                }
-                }else if(s.status === 0){
-                  status = "Chưa khởi hành";
-                  if(data.driver){
-                    btn = `
-                    <button class="btn btn-outline-danger mb-1" onclick='deleteSchedule("${s._id}")'>Hủy lịch</button>
-                    <button class="btn btn-outline-success mb-1 ml-1" onclick='updateSchedule("${s._id}","${i}")'>Khởi hành</button>
-                    `;
-                  }else{
-                    btn = `
-                    <button class="btn btn-outline-danger mb-1" onclick='deleteSchedule("${s._id}")'>Hủy lịch</button>
-                    `;
-                  }
-                }else if(s.status === 2){
+              if(s.status === 2){
                   status = "Đã hoàn thành";
-                }else{
-                  status = "Đã hủy lịch";
-                }
+                  btn = `
+                    <button class="btn btn-outline-primary">Xuất báo cáo</button>
+                  `
+                
                 var id = "s-" + i;
               
                 var string = `
-                  <tr id="${id}" style="cursor:pointer" onclick=''>
-                    <td class="route"></td>
-                    <td class="lisence"></td>
-                    <td class="name"></td>
-                    <td class="day"></td>
-                    <td id="status-${i}">${status}</td>
+                  <tr id="${id}" style="cursor:pointer" >
+                    <td onclick='openDetail("${s._id}")' class="route"></td>
+                    <td onclick='openDetail("${s._id}")' class="lisence"></td>
+                    <td onclick='openDetail("${s._id}")' class="name"></td>
+                    <td onclick='openDetail("${s._id}")' class="day"></td>
+                    <td onclick='openDetail("${s._id}")' id="status-${i}">${status}</td>
+                    <td onclick='openDetail("${s._id}")'>${s.report}</td>
                     <td id="action-${i}">`+ btn +
                     `</td>
                   </tr>
@@ -332,9 +312,8 @@
                   $(string2).html(r.departureDayTime);
                   dateTime(string2);
                 })
-              }
+            }
           })
-
           }else{
             console.log("Loi o dau do roi")
           }
@@ -345,138 +324,23 @@
           
         }
 
-  getSchedules();
+    getSchedules();
 
-  function dateTime(id){
-    var d = document.querySelector(id);
-    console.log((d.innerHTML))
-    var date = d.innerHTML.slice(0,10).split("-");
-    console.log(date);
-    var time = d.innerHTML.slice(11, 19)
-    console.log(time);
-    var dateafterchange = date[2] + "/" + date[1] + "/" +date[0];
-    d.innerHTML = dateafterchange + " - " + time;
-  }
+    function dateTime(id){
+        var d = document.querySelector(id);
+        console.log((d.innerHTML))
+        var date = d.innerHTML.slice(0,10).split("-");
+        console.log(date);
+        var time = d.innerHTML.slice(11, 19)
+        console.log(time);
+        var dateafterchange = date[2] + "/" + date[1] + "/" +date[0];
+        d.innerHTML = dateafterchange + " - " + time;
+    }
 
-  function deleteSchedule(id){
-    fetch('/schedules/delete', {
-      method: "POST",
-      headers:{
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        _id: id
-      }),
-    }).then(response => response.json())
-    .then(data => {
-      if (data.success){
-        swal.fire({
-          icon: "success",
-          title: data.msg,
-          showConfirmButton: false,
-          heightAuto: false,
-        })
-        setTimeout(() => {
-          window.location.href = "/schedules";
-        }, 1000);
-      }else{
-        swal.fire({
-          icon: "error",
-          title: data.msg,
-          showConfirmButton: false,
-          heightAuto: false,
-        })
-      }
-    })
-  }
-
-  function updateSchedule(id, index){
-    fetch('/schedules/updateStatus',{
-        method: "POST",
-        headers:{
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: id
-      })
-    }).then(response => response.json())
-    .then(data => {
-      console.log(data);
-      if(data.success){
-        swal.fire({
-          icon: "success",
-          title: data.msg,
-          showConfirmButton: false,
-          heightAuto: false,
-        })
-
-        var action = "action-" + index;
-        var status = "status-" + index;
-        $("#" + action).html(`
-          <button class="btn btn-outline-warning mb-1" onclick='report("${id}")'>Báo cáo sự cố</button>
-          <button class="btn btn-outline-success mb-1 ml-1" data-bs-toggle="modal" data-bs-target="#report" onclick='openReport("${s._id}","${i}")'>Hoàn thành</button>
-        `);
-        $("#" + status).html("Đang khởi hành");
-      }else{
-        swal.fire({
-          icon: "error",
-          title: data.msg,
-          showConfirmButton: false,
-          heightAuto: false,
-        })
-      }
-    })
-  }
-
-  function openReport(id,i){
-    $("#scheduleId").val(id);
-    $("#index").val(i);
-  }
-
-  function finishSchedule(){
-    fetch('/schedules/report',{
-        method: "POST",
-        headers:{
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: $("#scheduleId").val(),
-        report: $("#reportText").val()
-      })
-    }).then(response => response.json())
-    .then(data => {
-      console.log(data);
-      if(data.success){
-        swal.fire({
-          icon: "success",
-          title: data.msg,
-          showConfirmButton: false,
-          heightAuto: false,
-        })
-
-        var action = "action-" + $("#index").val();
-        var status = "status-" + $("#index").val();
-        $("#" + action).html(``);
-        $("#" + status).html("Đã hoàn thành");
-        $("#reportText").val("");
-        $("#reportClose").click();
-      }else{
-        swal.fire({
-          icon: "error",
-          title: data.msg,
-          showConfirmButton: false,
-          heightAuto: false,
-        })
-      }
-    })
-  }
-
-  function report(id){
-    console.log(id);
-  }
+    function openDetail(id){
+        console.log(id);
+    }
   </script>
 </body>
-
-
 
 </html>

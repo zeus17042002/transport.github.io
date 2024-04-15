@@ -12,6 +12,7 @@ var usersRouter = require("./routes/users");
 var adminRouter = require("./routes/admin");
 var routesRouter = require("./routes/routes");
 var schedulesRouter = require('./routes/schedules');
+var reportRouter = require('./routes/report');
 var { formatDate } = require("./helpers/FormatInfo");
 var app = express();
 
@@ -91,6 +92,7 @@ app.use("/users", usersRouter);
 app.use("/admin", adminRouter);
 app.use("/routes", routesRouter);
 app.use('/schedules', schedulesRouter);
+app.use('/report', reportRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

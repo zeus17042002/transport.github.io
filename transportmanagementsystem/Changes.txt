@@ -1,0 +1,5 @@
+Sửa lại model route và schedule
+Thêm schedulecontroller và schedulerouter
+thêm userMenu.hbs và sửa lại chỗ route
+khởi tạo schedules.hbs
+chỉnh sửa routecontroler và route
