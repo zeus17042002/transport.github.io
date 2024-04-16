@@ -23,7 +23,7 @@
                             <div class="row mb-3">
                                 <label for="floatingSelect" class="col-sm-3 col-form-label">Role</label>
                                 <select id="addFormRole" class="form-control" name="role">
-                                    <option value="1">Operator</option>
+                                    {{#if_eq userRole 0}}<option value="1">Operator</option>{{/if_eq}}
                                     <option value="2">Driver</option>
                                 </select>
                                 <div class="invalid-feedback mt-3" id="addEmployeeRoleErr"></div>
