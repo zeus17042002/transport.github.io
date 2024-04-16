@@ -146,10 +146,10 @@
   <div class="container mt-4"> <!-- Added margin-top here -->
     <!-- Search Bar and Buttons -->
 
-    {{#if userRole}}
+    {{#if_eq userRole 2}}
     {{else}}
       <button class="route-add-btn" data-bs-toggle="modal" data-bs-target="#newRoute">Thêm tuyến đường</button>
-    {{/if}}
+    {{/if_eq}}
     <div class="search-bar input-group mb-3">
       <input type="text" class="form-control route-input" placeholder="Từ khóa..." aria-label="Từ khóa">
       <div class="input-group-append">
@@ -193,14 +193,14 @@
             <td>
               {{checkRouteStatus this.status}}
             </td>
-            {{#if ../userRole}}
-              <td id="{{this._id}}">
-                  <button class="btn btn-outline-success mb-1" onclick='addSchedule("{{this._id}}","{{../userId}}")'>Đăng ký tuyến</button>
-              </td>
-            {{else}}
+            {{#if ../admin}}
               <td>
                   <button class="btn btn-outline-warning mb-1" onclick='changeEditForm("{{this._id}}", "{{this.routeName}}","{{this.start}}", "{{this.end}}", {{this.distance}}, {{this.fare}}, {{this.status}})' data-bs-toggle="modal" data-bs-target="#editRoute">Chỉnh sửa</button>
                   <a href="/routes/delete/{{this._id}}" class="btn btn-outline-danger">Xóa tuyến</a>
+              </td>
+            {{else}}
+              <td id="{{this._id}}">
+                  <button class="btn btn-outline-success mb-1" onclick='addSchedule("{{this._id}}","{{../userId}}")'>Đăng ký tuyến</button>
               </td>
             {{/if}}
           </tr>

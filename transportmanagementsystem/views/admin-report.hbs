@@ -187,9 +187,8 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="/javascript/route.js"></script>
   <script>
-    var data;
+    var data ;
     var table = document.getElementById("tableBody");
-
     function getRouteById(id){
         return fetch(`/routes/get/${id}`, {
             method: "GET",
@@ -278,19 +277,19 @@
               if(s.status === 2){
                   status = "Đã hoàn thành";
                   btn = `
-                    <button class="btn btn-outline-primary">Xuất báo cáo</button>
+                    <a href="/report/export/${s._id}" class="btn btn-outline-primary">Xuất báo cáo</a>
                   `
                 
                 var id = "s-" + i;
               
                 var string = `
                   <tr id="${id}" style="cursor:pointer" >
-                    <td onclick='openDetail("${s._id}")' class="route"></td>
-                    <td onclick='openDetail("${s._id}")' class="lisence"></td>
-                    <td onclick='openDetail("${s._id}")' class="name"></td>
-                    <td onclick='openDetail("${s._id}")' class="day"></td>
-                    <td onclick='openDetail("${s._id}")' id="status-${i}">${status}</td>
-                    <td onclick='openDetail("${s._id}")'>${s.report}</td>
+                    <td class="route"></td>
+                    <td class="lisence"></td>
+                    <td class="name"></td>
+                    <td class="day"></td>
+                    <td id="status-${i}">${status}</td>
+                    <td>${s.report}</td>
                     <td id="action-${i}">`+ btn +
                     `</td>
                   </tr>
@@ -335,10 +334,6 @@
         console.log(time);
         var dateafterchange = date[2] + "/" + date[1] + "/" +date[0];
         d.innerHTML = dateafterchange + " - " + time;
-    }
-
-    function openDetail(id){
-        console.log(id);
     }
   </script>
 </body>

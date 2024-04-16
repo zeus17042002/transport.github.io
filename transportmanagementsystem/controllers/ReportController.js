@@ -19,26 +19,14 @@ class RoutesController{
         }
     }
 
-    async AddRoute(req, res){
-        if(req.body === null){
-            return res.json({success: false, msg: "Vui lòng điền thông tin vào"});
-        }else if(req.body.routeName === "" || req.body.start === "" || req.body.end === "" || req.body.distance === "" || req.body.fare === ""){
-            return res.json({success: false, msg: "Vui lòng điền đầy đủ thông tin"});
-        }else
-        {
-            await Route.find({routeName: req.body.routeName}).then((route) => {
-                if(route.length !== 0){
-                    return res.json({success: false, msg: "Đã tồn tại tên tuyến đường này"});
-                }else{
-                    try{
-                        const newRoute = new Route(req.body)
-                        newRoute.save()
-                        return res.json({success: true, data: newRoute, msg:"Đã thêm thành công"});
-                    }catch (err){
-                        console.log(err);
-                        return res.status(500);
-                    }
-                }
+    async ExportReport(req, res){
+        if(!req.session.userId){
+            return res.render("index/login");
+        }else if(req.params.id === null){
+            return res.status(404);
+        }else{
+            await Schedule.findById(req.params.id).then(s => {
+                return res.render("export-report", {scheduleId: s._id, employeeId: s.employeeId, routeId: s.routeId, busId: s.busId ,userRole: req.session.userRole,userId: req.session.userId, userName: req.session.userName, admin: true});
             })
         }
     }

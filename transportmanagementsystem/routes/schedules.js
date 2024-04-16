@@ -8,5 +8,6 @@ router.post('/report', SchedulesController.PostReport);
 router.post('/add', SchedulesController.AddSchedule);
 router.post('/delete', SchedulesController.DeleteSchedule);
 router.post('/updateStatus', SchedulesController.UpdateStatusSchedule);
+router.get('/detail/:id', SchedulesController.GetScheduleById);
 
 module.exports = router;

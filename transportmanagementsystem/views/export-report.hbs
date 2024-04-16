@@ -1,0 +1,296 @@
+<style>
+    {
+            {
+            !-- .reportLayout {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                height: fit-content;
+                min-width: 100vh;
+                justify-content: center;
+                align-items: center;
+                margin-top: 50px;
+            }
+
+            --
+        }
+    }
+
+    .driver-feedback {
+        display: flex;
+        flex-direction: row;
+        font-size: 16px;
+        align-items: center;
+    }
+
+    .feedback-header {
+        font-weight: bold;
+        margin-top: 10px;
+        margin-bottom: 0;
+    }
+
+    .feedback {
+        margin-top: 10px;
+        margin-bottom: 0;
+        font-size: 16px;
+        margin-left: 5px;
+    }
+</style>
+
+<div id="menu">
+    {{> menu}}
+</div>
+<div class="container-fluided m-2">
+    <div class="reportLayout row">
+        <div class="bg-white rounded mt-2 mb-2 p-3">
+            <h3 class="text-center">
+                Báo cáo hành trình
+            </h3>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Tên tuyến đường</th>
+                            <th>Điểm đi</th>
+                            <th>Điểm đến</th>
+                            <th>Ngày khởi hành</th>
+                            <th>Số hành khách</th>
+                            <th>Nhiên liệu tiêu thụ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="routeContainer">
+                        <tr>
+                            <td id="routeName"></td>
+                            <td id="start"></td>
+                            <td id="end"></td>
+                            <td id="day"></td>
+                            <td id="customer"></td>
+                            <td id="fuel"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="driver-feedback">
+                <p class="feedback-header">
+                    Báo cáo của tài xế:
+                </p>
+                <p class="feedback" id="feedback">
+
+                </p>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-6">
+                    <h3 class="text-center">
+                        Thông Tin Xe
+                    </h3>
+                    <hr>
+                    <div>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Biển số</h6>
+                                    </div>
+                                    <div id="liscense" class="col-sm-9 text-secondary">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Loại xe</h6>
+                                    </div>
+                                    <div id="kind" class="col-sm-9 text-secondary">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Sức chứa</h6>
+                                    </div>
+                                    <div id="capacity" class="col-sm-9 text-secondary">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <h3 class="text-center">
+                        Thông Tin Tài Xế
+                    </h3>
+                    <hr>
+                    <div>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Full Name</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary" id="driverName">
+
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Email</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary" id="driverEmail">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Mobile</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary" id="driverPhone">
+
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Address</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary" id="driverAddress">
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function getScheduleById(id) {
+        fetch(`/schedules/detail/${id}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(response => {
+            return response.json();
+        }).then(data => {
+            if (data.success) {
+                console.log(data);
+                var schedule = data.data;
+                $("#feedback").html(schedule.report);
+                getRouteById(schedule.routeId).then(r => {
+                    $('#routeName').html(r.routeName)
+                    $('#start').html(r.start);
+                    $('#end').html(r.end);
+                    $('#day').html(r.departureDayTime);
+                    dateTime('#day');
+                    var fuel = Math.round(r.distance / 60) + " lít";
+                    $("#fuel").html(fuel);
+                })
+
+                getEmployee(schedule.employeeId).then(e => {
+                    $('#driverName').html(e[0].name);
+                    $('#driverEmail').html(e[0].email);
+                    $('#driverPhone').html("Chưa cập nhật");
+                    $('#driverAddress').html("Chưa cập nhật");
+                })
+
+                getBusById(schedule.busId).then(b => {
+                    $('#liscense').html(b.licensePlate);
+                    $('#kind').html(b._model);
+                    $('#capacity').html(b.capacity);
+                    $('#customer').html(b.capacity);
+
+                })
+            }
+        })
+    }
+
+    function getRouteById(id) {
+        return fetch(`/routes/get/${id}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }).then(data => {
+            if (data.success) {
+                return data.route
+            } else {
+                console.log("Loi roi day");
+            }
+        })
+            .catch(error => {
+                console.error('Error:', error);
+                return null;
+            });
+    }
+
+    function getEmployee(id) {
+        return fetch('/user/getUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: id
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    return (data.users);
+                } else {
+                    // Handle unsuccessful response
+                    return null;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                return null;
+            });
+    }
+
+    function getBusById(id) {
+        return fetch(`/bus/getBus/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    return data.bus;
+                } else {
+                    console.log("Loi o dau roi do");
+                }
+            })
+    }
+
+    function dateTime(id) {
+        var d = document.querySelector(id);
+        console.log((d.innerHTML))
+        var date = d.innerHTML.slice(0, 10).split("-");
+        console.log(date);
+        var time = d.innerHTML.slice(11, 19)
+        console.log(time);
+        var dateafterchange = date[2] + "/" + date[1] + "/" + date[0];
+        d.innerHTML = dateafterchange + " - " + time;
+    }
+
+    getScheduleById("{{scheduleId}}")
+</script>

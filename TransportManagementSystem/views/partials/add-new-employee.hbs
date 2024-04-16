@@ -10,22 +10,22 @@
                 <div class="form-group">
                     <main class="form-signin w-100 m-auto">
                         <form style="max-width: 500px;" class="m-auto" id="addEmployeeForm">
-                            <div class="form-floating mb-3">
+                            <div class="row mb-3">
+                                <label for="floatingInput" class="col-sm-3 col-form-label">Name</label>
                                 <input id="addFormName" type="text" class="form-control" name="name" value="">
-                                <label for="floatingInput">Name</label>
                                 <div class="invalid-feedback mt-3" id="addEmployeeNameErr"></div>
                             </div>
-                            <div class="form-floating mb-3">
+                            <div class="mb-3 row">
+                                <label for="floatingInput" class="col-sm-3 col-form-label">Email</label>
                                 <input id="addFormEmail" type="email" class="form-control" name="email" value="">
-                                <label for="floatingInput">Email</label>
                                 <div class="invalid-feedback mt-3" id="addEmployeeEmailErr"></div>
                             </div>
-                            <div class="form-floating mb-3">
+                            <div class="row mb-3">
+                                <label for="floatingSelect" class="col-sm-3 col-form-label">Role</label>
                                 <select id="addFormRole" class="form-control" name="role">
                                     <option value="1">Operator</option>
                                     <option value="2">Driver</option>
                                 </select>
-                                <label for="floatingSelect">Role</label>
                                 <div class="invalid-feedback mt-3" id="addEmployeeRoleErr"></div>
                             </div>
                         </form>

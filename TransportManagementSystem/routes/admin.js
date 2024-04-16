@@ -10,7 +10,6 @@ router.use('/', (req,res, next)=>{
     next();
   }
 });
-router.get('/', AdminController.GetAdmin);
 
 router.get('/employees', AdminController.GetEmployee);
 router.get('/changePass', AdminController.GetChangeAdminPassword);

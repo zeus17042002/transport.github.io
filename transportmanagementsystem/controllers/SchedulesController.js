@@ -147,6 +147,20 @@ class SchedulesController{
             }
         }
     }
+
+    async GetScheduleById(req, res){
+        if(req.params.id === null){
+            return res.json({success: false, msg: "Id không hợp lệ"});
+        }else{
+            Schedule.findById(req.params.id).then(s => {
+                if(s != null){
+                    return res.json({success: true, data: s});
+                }else{
+                    return res.json({success: false, msg: "Không tìm thấy trong dữ liệu"});
+                }
+            })
+        }
+    }
 }
 
 module.exports = new SchedulesController();

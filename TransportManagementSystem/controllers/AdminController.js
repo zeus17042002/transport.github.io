@@ -3,11 +3,6 @@ var bcrypt = require("bcrypt");
 var { body, validationResult } = require("express-validator");
 
 class AdminController {
-  GetAdmin(req, res) {
-    return res.render("admin/dashboard", {
-      layout: "admin-layout",
-    });
-  }
   GetChangeAdminPassword(req, res) {
     return res.render("admin/admin-change-password");
   }
